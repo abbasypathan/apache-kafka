@@ -103,3 +103,48 @@ Concept of Leader for a Partition
 - Zookeeper by design operates with an odd number of servers (1, 3, 5, 7)
 - Zookeeper has a leader (writes) the rest of the servers are followers (reads)
 - (Zookeeper does NOT store consumer offsets with Kafka > v0.10)
+
+========================================================================================================================================================================================================================
+
+** Kafka Setup with UI & CLI
+
+docker compose -f zk-single-kafka-single.yml up
+docker compose -f zk-single-kafka-single.yml down
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+* Kafka Topic Management (kafka-topics)
+
+- Open CLI of kafka which is running inside docker using : docker exec -it kafka1 bash
+- Change directory to bin : cd /user/bin/
+
+1. Create Kafka Topics
+kafka-topics --bootstrap-server localhost:9092 --topic first_topic --create
+
+2. Create Kafka Topics With Partition Number
+kafka-topics --bootstrap-server localhost:9092 --topic second_topic --create --partitions 3
+
+3. Create Kafka Topics With Partition Number & Replication Factor
+kafka-topics --bootstrap-server localhost:9092 --topic third_topic --create --partitions 3 --replication-factor 1
+
+- The replication factor cannot be greater than the number of brokers.
+
+4. List Kafka Topics
+kafka-topics --bootstrap-server localhost:9092 --list
+
+5. Describe Kafka Topics
+kafka-topics --bootstrap-server localhost:9092 --topic first_topic --describe
+
+6. Increase Partitions in a Kafka Topic
+kafka-topics --bootstrap-server localhost:9092 --alter --topic second_topic --partitions 2
+
+- Kafka only supports increasing the number of partitions. Decreasing partitions is not allowed because it could lead to data loss, break consumer offsets, violate ordering guarantees, and disrupt key-based partitioning. The recommended solution is to create a new topic with the required number of partitions and migrate the data.
+
+7. Delete a Kafka Topic
+kafka-topics --bootstrap-server localhost:9092 --topic first_topic --delete
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+* 
+
+========================================================================================================================================================================================================================
